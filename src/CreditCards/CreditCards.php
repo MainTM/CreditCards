@@ -78,7 +78,7 @@ class CreditCards extends PluginBase implements Listener {
 	   * }
 	   */
 	public function months() {
-		date ( "n" );
+		return date ( "n" );
 	}
 	public function monthDate() {
 		$overdue = $this->data ["Cards"] [$name] ["Overdue"];
