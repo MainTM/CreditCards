@@ -151,7 +151,7 @@ class CreditCards extends PluginBase implements Listener {
 						];
 						$sendername = $sender->getName ();
 						if ($p instanceof Player) {
-							$p->sendMessage ( Color::BLUE . "$prefix  $sendername 님이 신용카드로 $amount 만큼 결제하였습니다!" );
+							$p->sendMessage ( Color::YELLOW . "$prefix  $sendername 님이 신용카드로 $amount 만큼 결제하였습니다!" );
 						}
 						break;
 				}
