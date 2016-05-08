@@ -65,6 +65,7 @@ class CreditCards extends PluginBase implements Listener {
 		$this->getServer ()->getPluginManager ()->registerEvents ( $this, $this );
 		$this->api = EconomyAPI::getInstance ();
 		// $this->messages = $this->MessageLoad();
+		//나중에 messages.yml 사용시 쓸 부분
 	}
 	public function saveYml() {
 		$save = new Config ( $this->getDataFolder () . "CreditCards.yml", Config::YAML );
@@ -74,11 +75,17 @@ class CreditCards extends PluginBase implements Listener {
 	   * public function MsgLoad()
 	   * {
 	   * $this->saveResource("messages.yml");
-	   * return (new Config($this->getDataFolder()."messages.yml", Config::YAML))->getAll(); //나중에 messages.yml 사용시 쓸 부분
+	   * return (new Config($this->getDataFolder()."messages.yml", Config::YAML))->getAll();
 	   * }
 	   */
+	   //나중에 messages.yml 사용시 쓸 부분
 	public function months() {
-		return date ( "n" );
+		$month_data = date ( "n" );
+		$month_data_int = (int)$month_data;
+		$arr2 = [
+			"$month_data_int"
+			];
+		return $arr2;
 	}
 	public function monthDate() {
 		$overdue = $this->data ["Cards"] [$name] ["Overdue"];
@@ -86,8 +93,8 @@ class CreditCards extends PluginBase implements Listener {
 		$mine = $this->$data ["Cards"] [$player->getName ()];
 		$check_overdue = $data ["Cards"] [$mine] ["Overdue"];
 		$check_limitover = $data ["Cards"] [$mine] ["Current_payments"];
-		if (date ( "n" ) != $month) {
-			if ($check_overdue = 0) {
+		if ($this->months() != $month) {
+			if ($check_overdue == 0) {
 				$data ["Cards"] [$mine] = [ 
 						"Current_payments" => 0,
 						"Overdue" => 0 
@@ -123,6 +130,7 @@ class CreditCards extends PluginBase implements Listener {
 				if (! isset ( $args [0] )) {
 					$sender->sendMessage ( Color::RED . "$prefix /신용결제 <돈을 줄 닉네임> <돈의 양>" );
 					$sender->sendMessage ( Color::RED . "$prefix <>는 빼고 입력해주세요!" );
+					$sender->sendMessage ( Color::RED . "$prefix 더 많은 정보를 보려면 /신용 도움말" );
 					return true;
 				}
 				$Current_payments = $this->data ["Cards"] [$name] ["Current_payments"];
@@ -136,13 +144,15 @@ class CreditCards extends PluginBase implements Listener {
 					case -1 :
 						$sender->sendMessage ( Color::RED . "$prefix $player 님은 서버에 접속한 적이 없습니다." );
 						break;
-					case $limit_check > $limit :
-						$sender->sendMessage ( Color::RED . "$prefix 한도를 초과하여 결제 할수 없습니다" );
-						break;
-					case $overdue > 1 :
-						$sender->sendMessage ( Color::RED . "$prefix 카드가 연체 되어 있어 사용이 불가능 합니다!" );
-						break;
 					case 1 :
+						if($limit_check > $limit)
+						{
+							$sender->sendMessage ( Color::RED . "$prefix 한도를 초과하여 결제 할수 없습니다" );
+						}
+						if( $overdue > 1)
+						{
+							 $sender->sendMessage ( Color::RED . "$prefix 카드가 연체 되어 있어 사용이 불가능 합니다!" );
+						}
 						$sender->sendMessage ( Color::GOLD . "$prefix $player 님에게 신용카드로 $amount 만큼 결제 하였습니다!" );
 						$name = strtolower ( $sender->getName () );
 						$data ["Cards"] [$name] = [ 
@@ -157,6 +167,12 @@ class CreditCards extends PluginBase implements Listener {
 				}
 			case "신용" :
 				switch ($args [0]) {
+					if (! isset ( $args [0] )) {
+						foreach ( $this->getUserHelper () as $help ) {
+							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
+						}
+					return true;
+					}
 					case "결제금액" :
 						$sender->sendMessage ( Color::GREEN . "$prefix 여태까지 결제한 금액은 $Current_payments 입니다!" );
 					case "도움말" :
@@ -171,7 +187,8 @@ class CreditCards extends PluginBase implements Listener {
 	public function getUserHelper() {
 		$arr = [ 
 				"/신용결제 <닉네임> <돈 양>",
-				"/신용 결제금액" 
+				"/신용 결제금액" ,
+				"/신용 도움말"
 		];
 		return $arr;
 	}
