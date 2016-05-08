@@ -167,6 +167,7 @@ class CreditCards extends PluginBase implements Listener {
 				}
 			case "신용" :
 				switch ($args [0]) {
+					$Current_payments = $this->data ["Cards"] [$name] ["Current_payments"];
 					if (! isset ( $args [0] )) {
 						foreach ( $this->getUserHelper () as $help ) {
 							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
@@ -179,8 +180,16 @@ class CreditCards extends PluginBase implements Listener {
 						foreach ( $this->getUserHelper () as $help ) {
 							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
 						}
-					// case "비용납부" :
-					// 구현 해야 하는데 귀차니즘 강림
+					case "비용납부" :
+						if($this->api->mymoney($sender->getName())<$Current_payments)
+						{
+							$sender->sendMessage ( Color::RED . "$prefix $Current_payments 만큼을 결제할 돈이 부족합니다!" );
+							$sender->sendMessage ( Color::RED . "$prefix $sender->getName() 님의 보유한 금액은 $this->api->mymoney($sender->getName() 입니다!" );
+						}
+						$sendersmoney = $this->api->mymoney($sender->getName());
+						$this->api->getmoney($sender->getName(), $Current_payments);
+						$sender->sendMessage ( Color::GREEN . "$prefix $Current_payments 만큼의 비용이 모두 납부되었습니다!" );
+					        //더 구현 해야 하는데 귀차니즘 강림
 				}
 		}
 	}
