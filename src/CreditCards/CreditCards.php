@@ -31,7 +31,7 @@ use pocketmine\command\CommandSender;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\Server;
-use AstarBankAPI/AstarBankAPI;
+use AstarBankAPI\AstarBankAPI;
 
 class CreditCards extends PluginBase implements Listener {
 	public $config, $data;
