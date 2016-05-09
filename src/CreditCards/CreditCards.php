@@ -124,7 +124,7 @@ class CreditCards extends PluginBase implements Listener {
 		if ($p instanceof Player) {
 			$player = $p->getName ();
 		}
-		$result = $this->api->addMoney ( $player, $amount );
+		$result = $this->addMoney($name, $amount);
 		switch ($command->getName ()) {
 			case "신용결제" :
 				if (! isset ( $args [0] )) {
@@ -162,6 +162,7 @@ class CreditCards extends PluginBase implements Listener {
 						$sendername = $sender->getName ();
 						if ($p instanceof Player) {
 							$p->sendMessage ( Color::YELLOW . "$prefix  $sendername 님이 신용카드로 $amount 만큼 결제하였습니다!" );
+							$this->addMoney($p, $amount);
 						}
 						break;
 				}
@@ -181,13 +182,15 @@ class CreditCards extends PluginBase implements Listener {
 							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
 						}
 					case "비용납부" :
-						if($this->api->mymoney($sender->getName())<$Current_payments)
+						$money=$this->MyMoney($sender);
+						$name=strtolower($sender->getName());
+						if($this->api->mymoney($name < $Current_payments)
 						{
 							$sender->sendMessage ( Color::RED . "$prefix $Current_payments 만큼을 결제할 돈이 부족합니다!" );
-							$sender->sendMessage ( Color::RED . "$prefix $sender->getName() 님의 보유한 금액은 $this->api->mymoney($sender->getName() 입니다!" );
+							$sender->sendMessage ( Color::RED . "$prefix $name 님의 보유한 금액은" .$this->api->mymoney($name). "입니다!" );
 						}
-						$sendersmoney = $this->api->mymoney($sender->getName());
-						$this->api->getmoney($sender->getName(), $Current_payments);
+						$sendersmoney = $this->api->mymoney($name);
+						$this->api->TakeMoney($name, $Current_payments);
 						$sender->sendMessage ( Color::GREEN . "$prefix $Current_payments 만큼의 비용이 모두 납부되었습니다!" );
 					        //더 구현 해야 하는데 귀차니즘 강림
 				}
@@ -201,5 +204,11 @@ class CreditCards extends PluginBase implements Listener {
 		];
 		return $arr;
 	}
+	public function TakeMoney(Player $player,$money){
+		$this->api->setMoney($player,$this->MyMoney($player) - $money);
+	}
+	public function addMoney(Player $player,$money){
+			$this->api->setMoney($player,$this->MyMoney($player) + $money);
+		}
 }
 ?>
