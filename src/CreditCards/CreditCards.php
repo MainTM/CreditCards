@@ -31,6 +31,7 @@ use pocketmine\command\CommandSender;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\Server;
+use AstarBankAPI/AstarBankAPI;
 
 class CreditCards extends PluginBase implements Listener {
 	public $config, $data;
@@ -41,6 +42,8 @@ class CreditCards extends PluginBase implements Listener {
 	public $overdue;
 	public $month;
 	public $p;
+	public $api;
+	public $astarapi;
 	public function onEnable() {
 		$data = $this->data;
 		@mkdir ( $this->getDataFolder () );
@@ -50,11 +53,19 @@ class CreditCards extends PluginBase implements Listener {
 				"Cards" => [ ] 
 		] );
 		$this->data = $this->config->getAll ();
-		if (! ($this->money = $this->getServer ()->getPluginManager ()->getPlugin ( "EconomyAPI" )) and ! ($this->money = $this->getServer ()->getPluginManager ()->getPlugin ( "EconomyAPI" ))) {
+		if (! ($this->money = $this->getServer ()->getPluginManager ()->getPlugin ( "EconomyAPI" ))) {
 			$this->getLogger ()->info ( Color::RED . "EconomyAPI 플러그인이 없습니다... 플러그인을 비활성화 합니다" );
 			$this->getServer ()->getPluginManager ()->disablePlugin ( $this );
-		} else {
-			$this->getLogger ()->info ( Color::BLUE . "EconomyAPI 플러그인을 감지했습니다...! 플러그인을 활성화 합니다!" );
+		} 
+		else {
+			$this->getLogger ()->info ( Color::BLUE . "EconomyAPI 플러그인을 감지했습니다...! AstarBankAPI를 감지합니다!" );
+		}
+		if (! ($this->money = $this->getServer ()->getPluginManager ()->getPlugin ( "AstarBankAPI" ))) {
+			$this->getLogger ()->info ( Color::RED . "AstarBankAPI 플러그인이 없습니다... 플러그인을 비활성화 합니다" );
+			$this->getServer ()->getPluginManager ()->disablePlugin ( $this );
+		}
+		else {
+			$this->getLogger ()->info ( Color::BLUE . "AstarBankAPI 플러그인을 감지했습니다...! 플러그인을 활성화 합니다!" );
 		}
 		$server = Server::getInstance ();
 		$p = $server->getPlayer ( $player );
@@ -64,6 +75,7 @@ class CreditCards extends PluginBase implements Listener {
 		$this->monthDate ();
 		$this->getServer ()->getPluginManager ()->registerEvents ( $this, $this );
 		$this->api = EconomyAPI::getInstance ();
+		$this->astarapi = AstarBankAPI::getInstance ();
 		// $this->messages = $this->MessageLoad();
 		//나중에 messages.yml 사용시 쓸 부분
 	}
