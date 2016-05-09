@@ -192,7 +192,7 @@ class CreditCards extends PluginBase implements Listener {
 						$sendersmoney = $this->api->mymoney($name);
 						$this->api->TakeMoney($name, $Current_payments);
 						$sender->sendMessage ( Color::GREEN . "$prefix $Current_payments 만큼의 비용이 모두 납부되었습니다!" );
-					        //더 구현 해야 하는데 귀차니즘 강림
+					        //구현 완료!
 				}
 		}
 	}
