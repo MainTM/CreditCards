@@ -1,5 +1,5 @@
-# CreditCards
-A plugin that implements a credit card in PocketMine-MP.
+# CreditCards-AstarBankAPI
+A plugin that implements a credit card in PocketMine-MP. (Use AstarBank-API)
 
     The plugin that allows you to use your credit card in PocketMine-MP.
     Copyright (C) 2016  JellyBrick_
