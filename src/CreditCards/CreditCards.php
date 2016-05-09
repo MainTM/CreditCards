@@ -199,8 +199,9 @@ class CreditCards extends PluginBase implements Listener {
 	public function getUserHelper() {
 		$arr = [ 
 				"/신용결제 <닉네임> <돈 양>",
-				"/신용 결제금액" ,
-				"/신용 도움말"
+				"/신용 결제금액",
+				"/신용 도움말",
+                "/신용 비용납부",
 		];
 		return $arr;
 	}
