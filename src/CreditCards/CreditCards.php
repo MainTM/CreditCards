@@ -1,4 +1,4 @@
-<?php
+<?PHP
 
 /*
  * The plugin that allows you to use your credit card in PocketMine-MP.
@@ -43,6 +43,7 @@ class CreditCards extends PluginBase implements Listener {
 	public $p;
 	public function onEnable() {
 		$data = $this->data;
+		$this->getServer ()->getPluginManager ()->registerEvents ( $this, $this );
 		@mkdir ( $this->getDataFolder () );
 		$this->config = new Config ( $this->getDataFolder () . "CreditCards.yml", Config::YAML, [ 
 				"Limit" => 100000,
@@ -62,7 +63,6 @@ class CreditCards extends PluginBase implements Listener {
 			$player = $p->getName ();
 		}
 		$this->monthDate ();
-		$this->getServer ()->getPluginManager ()->registerEvents ( $this, $this );
 		$this->api = EconomyAPI::getInstance ();
 		// $this->messages = $this->MessageLoad();
 		//나중에 messages.yml 사용시 쓸 부분
