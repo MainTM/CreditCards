@@ -6,8 +6,7 @@
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * the Free Software Foundation, either version 3 of the License, or * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,18 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
 namespace CreditCards;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\event\Listener;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as Color;
-use pocketmine\utils\Utils;
-use pocketmine\command\PluginCommand;
+use pocketmine\utils\Utils;use pocketmine\command\PluginCommand;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use onebone\economyapi\EconomyAPI;
 use pocketmine\Player;
 use pocketmine\Server;
 
@@ -62,8 +58,7 @@ class CreditCards extends PluginBase implements Listener {
 		if ($p instanceof Player) {
 			$player = $p->getName ();
 		}
-		$this->monthDate ();
-		$this->api = EconomyAPI::getInstance ();
+		$this->monthDate (); 
 		// $this->messages = $this->MessageLoad();
 		//나중에 messages.yml 사용시 쓸 부분
 	}
@@ -170,7 +165,7 @@ class CreditCards extends PluginBase implements Listener {
 				switch ($args [0]) {
 					$Current_payments = $this->data ["Cards"] [$name] ["Current_payments"];
 					if (! isset ( $args [0] )) {
-						foreach ( $this->getUserHelper () as $help ) {
+						foreach ( $this->getHelp () as $help ) {
 							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
 						}
 					return true;
@@ -178,38 +173,38 @@ class CreditCards extends PluginBase implements Listener {
 					case "결제금액" :
 						$sender->sendMessage ( Color::GREEN . "$prefix 여태까지 결제한 금액은 $Current_payments 입니다!" );
 					case "도움말" :
-						foreach ( $this->getUserHelper () as $help ) {
+						foreach ( $this->getHelp () as $help ) {
 							$sender->sendMessage ( Color::DARK_GREEN . "$prefix $help" );
 						}
 					case "비용납부" :
 						$money=$this->MyMoney($sender);
 						$name=strtolower($sender->getName());
-						if($this->api->mymoney($name < $Current_payments)
+						if($this->money->myMoney($name < $Current_payments)
 						{
 							$sender->sendMessage ( Color::RED . "$prefix $Current_payments 만큼을 결제할 돈이 부족합니다!" );
-							$sender->sendMessage ( Color::RED . "$prefix $name 님의 보유한 금액은" .$this->api->mymoney($name). "입니다!" );
+							$sender->sendMessage ( Color::RED . "$prefix $name 님의 보유한 금액은" .$this->money->myMoney($name). "입니다!" );
 						}
-						$sendersmoney = $this->api->mymoney($name);
-						$this->api->TakeMoney($name, $Current_payments);
+						$sendersmoney = $this->money->myMoney($name);
+						$this->TakeMoney($name, $Current_payments);
 						$sender->sendMessage ( Color::GREEN . "$prefix $Current_payments 만큼의 비용이 모두 납부되었습니다!" );
 					        //구현 완료!
 				}
 		}
 	}
-	public function getUserHelper() {
+	public function getHelp() {
 		$arr = [ 
 				"/신용결제 <닉네임> <돈 양>",
 				"/신용 결제금액",
 				"/신용 도움말",
-                "/신용 비용납부",
+                		"/신용 비용납부"
 		];
 		return $arr;
 	}
 	public function TakeMoney(Player $player,$money){
-		$this->api->setMoney($player,$this->MyMoney($player) - $money);
+		$this->money->setMoney($player, $this->money->myMoney($player) - $money);
 	}
 	public function addMoney(Player $player,$money){
-			$this->api->setMoney($player,$this->MyMoney($player) + $money);
-		}
+			$this->money->setMoney($player, $this->money->myMoney($player) + $money);
+	}
 }
 ?>
