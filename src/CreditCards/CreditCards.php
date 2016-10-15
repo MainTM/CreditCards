@@ -179,12 +179,12 @@ class CreditCards extends PluginBase implements Listener {
 					case "비용납부" :
 						$money=$this->MyMoney($sender);
 						$name=strtolower($sender->getName());
-						if($this->money->myMoney($name < $Current_payments)
+						if($this->myMoney($name < $Current_payments)
 						{
 							$sender->sendMessage ( Color::RED . "$prefix $Current_payments 만큼을 결제할 돈이 부족합니다!" );
-							$sender->sendMessage ( Color::RED . "$prefix $name 님의 보유한 금액은" .$this->money->myMoney($name). "입니다!" );
+							$sender->sendMessage ( Color::RED . "$prefix $name 님의 보유한 금액은" .$this->myMoney($name). "입니다!" );
 						}
-						$sendersmoney = $this->money->myMoney($name);
+						$sendersmoney = $this->myMoney($name);
 						$this->TakeMoney($name, $Current_payments);
 						$sender->sendMessage ( Color::GREEN . "$prefix $Current_payments 만큼의 비용이 모두 납부되었습니다!" );
 					        //구현 완료!
@@ -204,7 +204,10 @@ class CreditCards extends PluginBase implements Listener {
 		$this->money->setMoney($player, $this->money->myMoney($player) - $money);
 	}
 	public function addMoney(Player $player,$money){
-			$this->money->setMoney($player, $this->money->myMoney($player) + $money);
+		$this->money->setMoney($player, $this->money->myMoney($player) + $money);
+	}
+	public function myMoney(Player $player){
+		return $this->money->myMoney($player);
 	}
 }
 ?>
